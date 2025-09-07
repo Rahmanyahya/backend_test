@@ -1,0 +1,97 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "mysql"
+  url      = env("DATABASE_URL")
+}
+
+model user {
+  uuid String @id @default(uuid())
+  name String 
+  email String @unique
+  password String 
+  role Role @default(USER)
+  createdAt DateTime @default(now())
+  updatedAt DateTime @updatedAt
+
+  Booking Booking[]
+}
+
+model Flight {
+  uuid          String    @id @default(uuid())
+  flightNumber  String
+  airline       String
+  origin        String
+  destination   String
+  departureTime DateTime
+  arrivalTime   DateTime
+  duration      Int
+  aircraftType  String
+  totalSeats    Int
+  availableSeats Int
+  price         Int
+  status        FlightStatus @default(scheduled)
+
+  bookings      Booking[]
+
+  @@index([origin])
+  @@index([destination])
+  @@index([departureTime])
+  @@index([status])
+}
+
+model Booking {
+  uuid           String    @id @default(uuid())
+  userId       String
+  flightId     String
+  bookingCode  String    @default(uuid()) @unique
+  bookingDate  DateTime  @default(now())
+
+  user         user      @relation(fields: [userId], references: [uuid], onUpdate: Cascade)
+  flight       Flight    @relation(fields: [flightId], references: [uuid], onUpdate: Cascade)
+  payment      Payment?
+
+  @@index([userId])
+  @@index([flightId])
+}
+
+model Payment {
+  id            String    @id @default(uuid())
+  bookingId     String    @unique
+  amount        Int
+  paymentMethod String
+  paymentStatus PaymentStatus @default(WAITING)
+  paymentDate   DateTime? @default(now())
+
+  booking       Booking   @relation(fields: [bookingId], references: [uuid], onUpdate: Cascade, onDelete: Cascade )
+}
+
+enum Role {
+  USER
+  ADMIN
+}
+
+enum FlightStatus {
+  scheduled
+  delayed
+  boarding
+  departed
+  arrived
+  cancelled
+}
+
+
+enum PaymentStatus {
+  WAITING
+  CONFIRMED
+  REJECTED
+}
+
