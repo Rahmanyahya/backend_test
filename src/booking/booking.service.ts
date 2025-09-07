@@ -49,7 +49,7 @@ export class BookingService {
             name: data.user.name,
             code: data.bookingCode,
             flight: data.flight.flightNumber,
-            paymentStatus: data.payment?.paymentStatus
+            status: data.payment?.paymentStatus
         }
     }
 
