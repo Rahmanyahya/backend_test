@@ -14,6 +14,9 @@ export class FlightService {
 
         if (data) throw new ErrorHandler("Flight already exists", 409);
 
+        if(userRequest.availableSeats < userRequest.totalSeats) throw new ErrorHandler("Available seats cannot be less than total seats", 400);
+        
+
         await FlightRepository.create(userRequest);
     }
 
