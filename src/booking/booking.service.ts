@@ -32,7 +32,7 @@ export class BookingService {
                 uuid: item.uuid,
                 name: item.user.name,
                 code: item.bookingCode,
-                paymentStatus: item.payment?.paymentStatus,
+                status: item.payment?.paymentStatus,
             }
         ))
     }
