@@ -2,7 +2,6 @@ import { NextFunction, Response } from "express";
 import { UserRequest } from "../config/web";
 import { BookingService } from "./booking.service";
 import { PaymentStatus } from "@prisma/client";
-import { ErrorHandler } from "../config/error.handler";
 
 export class BookingController {
 
@@ -11,8 +10,10 @@ export class BookingController {
             const { flightId, amount, paymentMethod } = req.body;
             const userId = req.user?.uuid;
 
+
             if (!userId) throw new Error("User not found");
 
+            console.log(flightId, userId, amount, paymentMethod);
             await BookingService.createBooking({
                 flightId,
                 userId,

@@ -10,7 +10,6 @@ export class BookingService {
     static async createBooking(payload: CreateBooking) {
         const userRequest = BookingSchema.createBooking.parse(payload);
 
-     
 
         const isFlightExist = await FlightRepository.findOne({ uuid: userRequest.flightId });
 

@@ -23,7 +23,7 @@ export class AuthService {
             throw new ErrorHandler("Invalid password", 401);
         }
 
-        return { token: Jwt.createJWT(user.email, user.role), role: user.role };
+        return { token: Jwt.createJWT(user.uuid, user.role), role: user.role };
     }
     
     static async Register(payload: User) {
@@ -40,7 +40,7 @@ export class AuthService {
 
         await AuthRepository.create({ email: userRequest.email, password: hashedPassword, name: userRequest.name });
 
-        return { token: Jwt.createJWT(userRequest.email, "USER"), role: "USER" };
+        return { message: "User created successfully" };
     }
 
 }

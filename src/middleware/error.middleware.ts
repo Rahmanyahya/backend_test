@@ -14,6 +14,7 @@ export const ErrorMiddleware = (
     } else if (err instanceof ZodError) {
       res.status(400).json({ message: err });
     } else {
+      console.error(err);
       res.status(500).json({ message: "Internal server error" });
     }
 }
