@@ -20,6 +20,8 @@ export class BookingService {
         const booking = await BookingRepository.createBooking({ flight: { connect: { uuid: userRequest.flightId } }, user: { connect: { uuid: userRequest.userId } }});
 
         await BookingRepository.createPayment({ booking: { connect: { uuid: booking.uuid } }, amount: userRequest.amount, paymentMethod: userRequest.paymentMethod });
+
+        await FlightRepository.update({ uuid: isFlightExist.uuid }, { availableSeats: isFlightExist.availableSeats - 1 });
     }
 
     static async getBookings(payload: GetBookings) {
